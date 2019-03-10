@@ -1,0 +1,39 @@
+.navbar-flex {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.contanier-flex {
+    display: flex;
+    justify-content: flex-start;
+    padding-right: 10px;
+}
+
+.navbar-back {
+    background-color: #efefef;
+}
+
+.button-color {
+    background-color: #ffeb00;
+}
+
+.chollo {
+    margin: 30px 15px 30px 30px;
+}
+
+.chollo-indv {
+    margin: 30px 15px 30px 15px;
+    padding: 10px 15px 15px 15px;
+    background-color: white;
+}
+
+.chollo-logo {
+    width: 100px;
+    height: 100px;
+}
+
+#access {
+    margin-left: 10px;
+}
+

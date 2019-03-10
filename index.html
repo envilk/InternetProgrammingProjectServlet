@@ -1,0 +1,109 @@
+<html>
+
+<head>
+    <title>BestBuy</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-light navbar-back border">
+        <a class="navbar-brand" href="#"><img src="images/pageLogo.png" alt="pageLogo" height="70" width="101,5"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+            </ul>
+        </div>
+-->
+        <div class="navbar-flex input-group input-container">
+            <div class="col-sm-2">
+                <input type="text" class="form-control" placeholder="Search" name="search">
+            </div>
+            <div>
+                <button type="button" class="form-control btn btn-default button-color border">Add ganga</button>
+            </div>
+            <div>
+                <button type="button" id="access" class="form-control btn btn-default button-color border">Access</button>
+            </div>
+             <!-- Button to open the modal login form -->
+<button onclick="document.getElementById('id01').style.display='block'">Login</button>
+
+<!-- The Modal -->
+<div id="id01" class="modal">
+  <span onclick="document.getElementById('id01').style.display='none'"
+class="close" title="Close Modal">&times;</span>
+
+  <!-- Modal Content -->
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <img src="img_avatar2.png" alt="Avatar" class="avatar">
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
+
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+</div> 
+        </div>
+    </nav>
+
+    <div class="contanier-flex">
+        <div class="chollo border navbar-back">
+            <div class="container">
+                <div class="chollo-indv border">
+                    <div>
+                        <img class="chollo-logo" src="images/champu.jpg">
+                    </div>
+                    <div>
+                        
+                    </div>
+                    <div>
+                        <button type="button" class="form-control btn btn-default button-color border">VER CHOLLO</button>
+                    </div>
+                </div>
+                <div class="chollo-indv border">
+                    <div>
+                        <img class="chollo-logo" src="images/pc.jpg">
+                    </div>
+                    <div>
+                        <button type="button" class="form-control btn btn-default button-color border">VER CHOLLO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            
+        </div>
+    </div>
+
+</body>
+
+</html>
