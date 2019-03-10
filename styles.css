@@ -1,7 +1,7 @@
 .navbar-flex {
     display: flex;
     justify-content: flex-end;
-    padding-right: 10px;
+    padding-right: 20px;
 }
 
 .contanier-flex {
@@ -12,10 +12,6 @@
 
 .navbar-back {
     background-color: #efefef;
-}
-
-.button-color {
-    background-color: #ffeb00;
 }
 
 .chollo {
