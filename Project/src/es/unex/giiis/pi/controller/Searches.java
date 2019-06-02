@@ -25,14 +25,14 @@ import es.unex.giiis.pi.model.Chollo;
 public class Searches extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(HttpServlet.class.getName());
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Searches() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public Searches() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,19 +47,15 @@ public class Searches extends HttpServlet {
 		//CHOLLOS
 		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
 		cholloDao.setConnection(conn);
-		
+
 		List<Chollo> chollosList = cholloDao.getAllBySearchAll((String)request.getParameter("search"));
-		
+
 		//request.setAttribute("chollosList", chollosList);
 		request.setAttribute("chollosList", chollosList);
-	
-		String referer = request.getHeader("referer");
+
 		RequestDispatcher view;
-		if(referer.equals("http://localhost:8080/Project/"))
-			view = request.getRequestDispatcher("index.jsp");
-		else
-			view = request.getRequestDispatcher("indexUserView.jsp");
-		
+		view = request.getRequestDispatcher("index.jsp");
+
 		view.forward(request, response);
 	}
 

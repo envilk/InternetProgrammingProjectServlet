@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import es.unex.giiis.pi.dao.CholloDAO;
 import es.unex.giiis.pi.dao.JDBCCholloDAOImpl;
 import es.unex.giiis.pi.model.Chollo;
 import es.unex.giiis.pi.model.User;
@@ -42,11 +43,24 @@ public class EditChollo extends HttpServlet {
 
 		logger.info("Atendiendo GET");
 
+		//GENERIC
+		ServletContext sc = request.getServletContext();
+		Connection conn = (Connection) sc.getAttribute("dbConn");
 		HttpSession session = request.getSession();
-		//session.removeAttribute("id");
-		session.setAttribute("id", request.getParameter("id"));
-
-		response.sendRedirect("EditChollo.jsp");
+		User user = (User) session.getAttribute("user");
+		
+		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
+		cholloDao.setConnection(conn);	
+		
+		if(user != null) {
+			String id = request.getParameter("id");
+			session.setAttribute("id", request.getParameter("id"));
+			Chollo chollo = cholloDao.get(Long.parseLong(id));
+			session.setAttribute("chollo", chollo);
+			response.sendRedirect("EditChollo.jsp");
+		}
+		else
+			response.sendRedirect("/Project");
 	}
 
 	/**
@@ -65,41 +79,47 @@ public class EditChollo extends HttpServlet {
 		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
 		cholloDao.setConnection(conn);	
 
-		String title = request.getParameter("title");
-		String description = request.getParameter("description");
-		String link = request.getParameter("link");
+		User user2 = (User) session.getAttribute("user");
 
-		String stringId = (String) session.getAttribute("id");
-		Long id = Long.parseLong(stringId);
+		if(user2 != null) {
+			String title = request.getParameter("title");
+			String description = request.getParameter("description");
+			String link = request.getParameter("link");
 
-		Chollo cholloAux = (Chollo) cholloDao.get(id);
+			String stringId = (String) session.getAttribute("id");
+			Long id = Long.parseLong(stringId);
 
-		if(!title.isEmpty())
-			cholloAux.setTitle(title);
-		if(!link.isEmpty())
-			cholloAux.setLink(link);
-		if(!description.isEmpty())
-			cholloAux.setDescription(description);
-		
-		//TODO IN MODEL MODIFY THE CHOLLO
-		//PUEDE HABER CHOLLOS REPETIDOS
-		cholloDao.save(cholloAux);
-		
-		List<Chollo> chollos = cholloDao.getAll();
-		List<Chollo> chollosUser = new ArrayList<Chollo>();
+			Chollo cholloAux = (Chollo) cholloDao.get(id);
 
-		User user = (User) session.getAttribute("user");
+			if(!title.isEmpty())
+				cholloAux.setTitle(title);
+			if(!link.isEmpty())
+				cholloAux.setLink(link);
+			if(!description.isEmpty())
+				cholloAux.setDescription(description);
 
-		for (Chollo chollo : chollos) {
-			//VER SI ESE CHOLLO ES DE ESTE USER ENTONCES SE PONE EN LISTA AUX Y ESA SE METE EN LA REQUEST
-			if(user.getId()==chollo.getIdu())
-				chollosUser.add(chollo);
+			//TODO IN MODEL MODIFY THE CHOLLO
+			//PUEDE HABER CHOLLOS REPETIDOS
+			cholloDao.save(cholloAux);
+
+			List<Chollo> chollos = cholloDao.getAll();
+			List<Chollo> chollosUser = new ArrayList<Chollo>();
+
+			User user = (User) session.getAttribute("user");
+
+			for (Chollo chollo : chollos) {
+				//VER SI ESE CHOLLO ES DE ESTE USER ENTONCES SE PONE EN LISTA AUX Y ESA SE METE EN LA REQUEST
+				if(user.getId()==chollo.getIdu())
+					chollosUser.add(chollo);
+			}
+
+			request.setAttribute("chollosUser", chollosUser);
+
+			RequestDispatcher view = request.getRequestDispatcher("ChollosUser.jsp");
+			view.forward(request, response);
 		}
-
-		request.setAttribute("chollosUser", chollosUser);
-
-		RequestDispatcher view = request.getRequestDispatcher("ChollosUser.jsp");
-		view.forward(request, response);
+		else
+			response.sendRedirect("/Project");
 
 	}
 

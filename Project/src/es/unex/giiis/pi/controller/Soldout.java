@@ -51,7 +51,7 @@ public class Soldout extends HttpServlet {
 		//CHOLLOS
 		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
 		cholloDao.setConnection(conn);
-
+		
 		List<Chollo> chollosList = cholloDao.getAll();
 		List<Chollo> chollosAvailable = new ArrayList<Chollo>();
 
@@ -62,12 +62,8 @@ public class Soldout extends HttpServlet {
 
 		request.setAttribute("chollosList", chollosAvailable);
 
-		String referer = request.getHeader("referer");
 		RequestDispatcher view;
-		if(referer.equals("http://localhost:8080/Project/"))
-			view = request.getRequestDispatcher("index.jsp");
-		else
-			view = request.getRequestDispatcher("indexUserView.jsp");
+		view = request.getRequestDispatcher("index.jsp");
 
 		view.forward(request, response);
 	}
@@ -94,26 +90,32 @@ public class Soldout extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 
-		//We check that the chollo exists
-		Chollo chollo = cholloDao.get(idC);
-		if(chollo.getSoldout() == 0)
-			chollo.setSoldout(1);
-		else
-			chollo.setSoldout(0);
+		if(user != null) {
 
-		cholloDao.save(chollo);
+			//We check that the chollo exists
+			Chollo chollo = cholloDao.get(idC);
+			if(chollo.getSoldout() == 0)
+				chollo.setSoldout(1);
+			else
+				chollo.setSoldout(0);
 
-		List<Chollo> chollos = cholloDao.getAll();
-		for (Chollo aux : chollos) {
-			//VER SI ESE CHOLLO ES DE ESTE USER ENTONCES SE PONE EN LISTA AUX Y ESA SE METE EN LA REQUEST
-			if(user.getId()==aux.getIdu())
-				chollosUser.add(aux);
+			cholloDao.save(chollo);
+
+
+			List<Chollo> chollos = cholloDao.getAll();
+			for (Chollo aux : chollos) {
+				//VER SI ESE CHOLLO ES DE ESTE USER ENTONCES SE PONE EN LISTA AUX Y ESA SE METE EN LA REQUEST
+				if(user.getId()==aux.getIdu())
+					chollosUser.add(aux);
+			}
+
+			request.setAttribute("chollosUser", chollosUser);
+
+			RequestDispatcher view = request.getRequestDispatcher("ChollosUser.jsp");
+			view.forward(request, response);
 		}
-
-		request.setAttribute("chollosUser", chollosUser);
-
-		RequestDispatcher view = request.getRequestDispatcher("ChollosUser.jsp");
-		view.forward(request, response);
+		else
+			response.sendRedirect("/Project");
 	}
 
 }

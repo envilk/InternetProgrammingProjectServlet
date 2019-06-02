@@ -31,7 +31,7 @@
 	<!-- MAIN NAVABAR (LOGO, SEARCH, ADD GANGA AND ACCESS) -->
 	<nav
 		class="navbar-flex navbar navbar-expand-sm navbar-light navbar-back border shadow-sm">
-		<a class="navbar-brand" href="#"><img src="images/pageLogo2.png"
+		<a class="navbar-brand" href="/Project"><img src="images/pageLogo2.png"
 			alt="pageLogo" height="100" width="100"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#collapsibleNavbar">
@@ -56,16 +56,97 @@
 					<button class="btn btn-dark btn-outline-light" type="submit">Search</button>
 				</div>
 			</form>
-			<div>
-				<button type="button" class="form-control btn btn-success border"
-					data-toggle="modal" data-target="#ModalLoginForm">Create
-					chollo</button>
+
+			<c:choose>
+				<c:when test="${empty user}">
+					<div>
+						<button type="button" class="form-control btn btn-success border"
+							data-toggle="modal" data-target="#ModalLoginForm">Create
+							chollo</button>
+					</div>
+					<div>
+						<button type="button" id="access"
+							class="form-control btn btn-success" data-toggle="modal"
+							data-target="#ModalLoginForm">Access</button>
+					</div>
+
+				</c:when>
+				<c:otherwise>
+					<form method="GET" action="CreateChollo.do">
+						<div>
+							<button type="submit" class="form-control btn btn-success border">Create
+								chollo</button>
+						</div>
+					</form>
+					<form method="GET" action="ChollosUser.do">
+						<div>
+							<button type="submit" class="form-control btn btn-info border">My
+								chollos</button>
+						</div>
+					</form>
+					<div>
+						<button type="button" id="access"
+							class="form-control btn btn-info" data-toggle="modal"
+							data-target="#ModalEditAccount">${user.username}</button>
+					</div>
+					<form method="GET" action="LogoutServlet.do">
+						<div>
+							<button type="submit" class="form-control btn btn-default">Logout</button>
+						</div>
+					</form>
+				</c:otherwise>
+			</c:choose>
+
+
+			<!-- Modal HTML Markup -->
+			<div id="ModalEditAccount" class="modal fade">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title">Profile</h1>
+						</div>
+						<div class="modal-body">
+							<form method="GET" action="EditAccount.do">
+								<input type="hidden" name="_token" value="">
+								<div class="form-group">
+									<label class="control-label">E-Mail Address</label>
+									<div>
+										<input type="email" class="form-control input-lg" name="email"
+											value="">
+									</div>
+									<span class="label label-default">Current email: </span> <label
+										class="control-label">${user.email}</label>
+								</div>
+								<div class="form-group">
+									<div>
+										<input type="password" class="form-control input-lg"
+											name="password">
+									</div>
+									<span class="label label-default">Current password: </span> <label
+										class="control-label">${user.password}</label>
+								</div>
+								<div class="form-group">
+									<div>
+										<button type="submit" class="btn btn-success ">Edit</button>
+									</div>
+								</div>
+							</form>
+							<form method="GET" action="DeleteAccount.do">
+								<div>
+									<button type="submit" class="btn btn-danger ">Delete
+										account</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
 			</div>
-			<div>
-				<button type="button" id="access"
-					class="form-control btn btn-success" data-toggle="modal"
-					data-target="#ModalLoginForm">Access</button>
-			</div>
+			<!-- /.modal -->
+
+
+
 
 			<!-- Modal HTML Markup -->
 			<div id="ModalLoginForm" class="modal fade">
@@ -142,7 +223,6 @@
 				<!-- /.modal-dialog -->
 			</div>
 			<!-- /.modal -->
-
 		</div>
 	</nav>
 
@@ -169,11 +249,24 @@
 						<div>
 							<p>${chollo.description}</p>
 						</div>
-						<div class="contanier-flex">
-							<a data-toggle="modal" data-target="#ModalLoginForm"><button
-									type="submit">&#128402;</button></a>
-							<p>${chollo.likes}</p>
-						</div>
+						<c:choose>
+							<c:when test="${empty user}">
+								<div class="contanier-flex">
+									<a data-toggle="modal" data-target="#ModalLoginForm"><button
+											type="submit">&#128402;</button></a>
+									<p>${chollo.likes}</p>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<form action="Likes.do?idc=${chollo.id}&idu=${user.id}"
+									method="post">
+									<div class="contanier-flex">
+										<button type="submit">&#128402;</button>
+										<p>${chollo.likes}</p>
+									</div>
+								</form>
+							</c:otherwise>
+						</c:choose>
 						<div>
 							<p>SOLDOUT</p>
 						</div>
@@ -196,11 +289,24 @@
 						<div>
 							<p>${chollo.description}</p>
 						</div>
-						<div class="contanier-flex">
-							<a data-toggle="modal" data-target="#ModalLoginForm"><button
-									type="submit">&#128077;</button></a>
-							<p>${chollo.likes}</p>
-						</div>
+						<c:choose>
+							<c:when test="${empty user}">
+								<div class="contanier-flex">
+									<a data-toggle="modal" data-target="#ModalLoginForm"><button
+											type="submit">&#128077;</button></a>
+									<p>${chollo.likes}</p>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<form action="Likes.do?idc=${chollo.id}&idu=${user.id}"
+									method="post">
+									<div class="contanier-flex">
+										<button type="submit">&#128077;</button>
+										<p>${chollo.likes}</p>
+									</div>
+								</form>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</c:otherwise>
 			</c:choose>

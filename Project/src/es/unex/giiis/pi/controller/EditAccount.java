@@ -63,43 +63,47 @@ public class EditAccount extends HttpServlet {
 
 		user = (User) session.getAttribute("user");//GETTING USER FORM CONTEXT
 
-		String possibleEmail = request.getParameter("email");
-		String possiblePass = request.getParameter("password");
+		if(user != null) {
+			String possibleEmail = request.getParameter("email");
+			String possiblePass = request.getParameter("password");
 
-		boolean flag = false;//SIGNIFICA QUE NO ESTA REPETIDO EN FALSE
-		
-		//CHECK IF THE EMAIL IS NOT REPEATED
-		if(!possibleEmail.isEmpty()) {
-			List<User> userList = userDao.getAll();
-			for (User aux : userList) {
-				String auxEmail = aux.getEmail();
-				if(auxEmail.equals(possibleEmail) && (user.getId() != aux.getId())) {
-					flag = true;
-					break;
-				}
-			}	
+			boolean flag = false;//SIGNIFICA QUE NO ESTA REPETIDO EN FALSE
+
+			//CHECK IF THE EMAIL IS NOT REPEATED
+			if(!possibleEmail.isEmpty()) {
+				List<User> userList = userDao.getAll();
+				for (User aux : userList) {
+					String auxEmail = aux.getEmail();
+					if(auxEmail.equals(possibleEmail) && (user.getId() != aux.getId())) {
+						flag = true;
+						break;
+					}
+				}	
+			}
+
+			RequestDispatcher view;
+			if(!possiblePass.isEmpty())
+				user.setPassword(possiblePass);
+
+			//IF THERE ARE OTHER EMAILS LIKE "POSSIBLEEMAIL THEN GO TO indexUserView, OTHERWISE GOES TO EditAccountConfirmation"
+			if(!flag) {
+				if(!possibleEmail.isEmpty())
+					user.setEmail(possibleEmail);
+
+				session.setAttribute("user", user);
+
+				view = request.getRequestDispatcher("EditAccountConfirmation.jsp");
+			}
+			else {
+				session.setAttribute("user", user);
+
+				view = request.getRequestDispatcher("index.jsp");
+			}
+
+			view.forward(request, response);
 		}
-
-		RequestDispatcher view;
-		if(!possiblePass.isEmpty())
-			user.setPassword(possiblePass);
-
-		//IF THERE ARE OTHER EMAILS LIKE "POSSIBLEEMAIL THEN GO TO indexUserView, OTHERWISE GOES TO EditAccountConfirmation"
-		if(!flag) {
-			if(!possibleEmail.isEmpty())
-				user.setEmail(possibleEmail);
-
-			session.setAttribute("user", user);
-
-			view = request.getRequestDispatcher("EditAccountConfirmation.jsp");
-		}
-		else {
-			session.setAttribute("user", user);
-
-			view = request.getRequestDispatcher("indexUserView.jsp");
-		}
-
-		view.forward(request, response);
+		else
+			response.sendRedirect("/Project");
 
 	}
 
@@ -131,14 +135,18 @@ public class EditAccount extends HttpServlet {
 		userDao.setConnection(conn);
 		user = (User) session.getAttribute("user");//GETTING USER FROM PAGE
 
-		userDao.save(user);
+		if(user != null) {
 
-		//request.setAttribute("user", user);
-		session.setAttribute("user", user);
+			userDao.save(user);
 
-		RequestDispatcher view = request.getRequestDispatcher("indexUserView.jsp");
-		view.forward(request, response);
+			//request.setAttribute("user", user);
+			session.setAttribute("user", user);
 
+			RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+			view.forward(request, response);
+		}
+		else
+			response.sendRedirect("/Project");
 	}
 
 }

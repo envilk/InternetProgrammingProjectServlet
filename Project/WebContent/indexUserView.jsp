@@ -75,6 +75,11 @@
 				<button type="button" id="access" class="form-control btn btn-info"
 					data-toggle="modal" data-target="#ModalLoginForm">${user.username}</button>
 			</div>
+			<form method="GET" action="LogoutServlet.do">
+				<div>
+					<button type="submit" class="form-control btn btn-default">Logout</button>
+				</div>
+			</form>
 
 			<!-- Modal HTML Markup -->
 			<div id="ModalLoginForm" class="modal fade">

@@ -41,7 +41,10 @@ public class SignInServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession();
+		if (session.getAttribute("user")== null) 
+			logger.info("------------------------NONE USER LOGGED-----------------------");
+		response.sendRedirect("/Project");
 	}
 
 	/**
@@ -84,12 +87,12 @@ public class SignInServlet extends HttpServlet {
 			//request.setAttribute("user", user);
 			session.setAttribute("user", user);
 
-			RequestDispatcher view = request.getRequestDispatcher("indexUserView.jsp");
+			RequestDispatcher view = request.getRequestDispatcher("index.jsp");
 			view.forward(request, response);
 		}
 		else {
 			logger.info("-----------------------ERROR-----------------------");
-			response.sendRedirect("ListChollosServlet.do");
+			response.sendRedirect("/Project");
 		}
 		
 	}

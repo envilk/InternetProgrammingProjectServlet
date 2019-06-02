@@ -27,22 +27,22 @@ import es.unex.giiis.pi.model.User;
 public class ChollosUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(HttpServlet.class.getName());   
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ChollosUser() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ChollosUser() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		logger.info("Atendiendo GET");
-		
+
 		//GENERIC
 		ServletContext sc = request.getServletContext();
 		Connection conn = (Connection) sc.getAttribute("dbConn");
@@ -51,22 +51,26 @@ public class ChollosUser extends HttpServlet {
 		//CHOLLOS
 		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
 		cholloDao.setConnection(conn);	
-		
+
 		List<Chollo> chollos = cholloDao.getAll();
 		List<Chollo> chollosUser = new ArrayList<Chollo>();
-		
+
 		User user = (User) session.getAttribute("user");
-		
-		for (Chollo chollo : chollos) {
-			//VER SI ESE CHOLLO ES DE ESTE USER ENTONCES SE PONE EN LISTA AUX Y ESA SE METE EN LA REQUEST
-			if(user.getId()==chollo.getIdu())
-				chollosUser.add(chollo);
+		if(user != null) {
+
+			for (Chollo chollo : chollos) {
+				//VER SI ESE CHOLLO ES DE ESTE USER ENTONCES SE PONE EN LISTA AUX Y ESA SE METE EN LA REQUEST
+				if(user.getId()==chollo.getIdu())
+					chollosUser.add(chollo);
+			}
+
+			request.setAttribute("chollosUser", chollosUser);
+
+			RequestDispatcher view = request.getRequestDispatcher("ChollosUser.jsp");
+			view.forward(request, response);
 		}
-		
-		request.setAttribute("chollosUser", chollosUser);
-		
-		RequestDispatcher view = request.getRequestDispatcher("ChollosUser.jsp");
-		view.forward(request, response);
+		else
+			response.sendRedirect("/Project");
 	}
 
 	/**
@@ -89,9 +93,9 @@ public class ChollosUser extends HttpServlet {
 		//request.setAttribute("chollosList", chollosList);
 		request.setAttribute("chollosList", chollosList);
 
-		RequestDispatcher view = request.getRequestDispatcher("indexUserView.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("index.jsp");
 		view.forward(request, response);
-		
+
 	}
 
 }

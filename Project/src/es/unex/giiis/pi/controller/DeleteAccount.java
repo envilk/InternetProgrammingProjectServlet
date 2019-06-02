@@ -26,38 +26,44 @@ import es.unex.giiis.pi.model.User;
 public class DeleteAccount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(HttpServlet.class.getName());
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DeleteAccount() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public DeleteAccount() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		logger.info("Atendiendo GET");
-		
-		RequestDispatcher view = request.getRequestDispatcher("DeleteAccountConfirmation.jsp");
-		view.forward(request, response);
+
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		if(user != null) {
+			RequestDispatcher view = request.getRequestDispatcher("DeleteAccountConfirmation.jsp");
+			view.forward(request, response);
+		}
+		else
+			response.sendRedirect("/Project");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		logger.info("Atendiendo POST");
-		
+
 		//GENERIC
 		ServletContext sc = request.getServletContext();
 		Connection conn = (Connection) sc.getAttribute("dbConn");
 		HttpSession session = request.getSession();
-		
+
 		//USERS
 		User user = new User();
 
@@ -65,13 +71,13 @@ public class DeleteAccount extends HttpServlet {
 		userDao.setConnection(conn);
 		user = (User) session.getAttribute("user");//GETTING USER FROM PAGE
 
-		List<User> userList = userDao.getAll();
-		logger.info("arrives here");
-		userDao.delete(user.getId());
-			
-		session.removeAttribute("user");
-		
-		response.sendRedirect("ListChollosServlet.do");
+
+		if(user != null) {
+			userDao.delete(user.getId());
+			session.invalidate();
+		}
+
+		response.sendRedirect("/Project");
 	}
 
 }

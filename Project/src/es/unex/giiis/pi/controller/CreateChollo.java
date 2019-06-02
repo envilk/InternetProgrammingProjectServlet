@@ -41,7 +41,13 @@ public class CreateChollo extends HttpServlet {
 
 		logger.info("Atendiendo GET");
 
-		response.sendRedirect("CreateChollo.jsp");
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+
+		if(user != null)
+			response.sendRedirect("CreateChollo.jsp");
+		else 
+			response.sendRedirect("/Project");
 	}
 
 	/**
@@ -60,29 +66,35 @@ public class CreateChollo extends HttpServlet {
 		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
 		cholloDao.setConnection(conn);	
 
-		Chollo chollo = new Chollo();
-		String title = request.getParameter("title");
-		String description = request.getParameter("description");
-		String link = request.getParameter("link");
+		User user2 = (User) session.getAttribute("user");
 
-		chollo.setTitle(title);
-		chollo.setDescription(description);
-		chollo.setLink(link);
+		if(user2 != null) {
+			Chollo chollo = new Chollo();
+			String title = request.getParameter("title");
+			String description = request.getParameter("description");
+			String link = request.getParameter("link");
 
-		//TODO IN MODEL CREATE THE CHOLLO
-		//PUEDE HABER CHOLLOS REPETIDOS
-		if(!title.isEmpty() && !link.isEmpty()) {
-			User user = (User) session.getAttribute("user");
-			chollo.setIdu(user.getId());
-			cholloDao.add(chollo);
+			chollo.setTitle(title);
+			chollo.setDescription(description);
+			chollo.setLink(link);
+
+			//TODO IN MODEL CREATE THE CHOLLO
+			//PUEDE HABER CHOLLOS REPETIDOS
+			if(!title.isEmpty() && !link.isEmpty()) {
+				User user = (User) session.getAttribute("user");
+				chollo.setIdu(user.getId());
+				cholloDao.add(chollo);
+			}
+			List<Chollo> chollosList = cholloDao.getAll();
+
+			request.setAttribute("chollosList", chollosList);
+
+			RequestDispatcher view = request.getRequestDispatcher("index.jsp");
+			view.forward(request, response);
 		}
+		else
+			response.sendRedirect("/Project");
 
-		List<Chollo> chollosList = cholloDao.getAll();
-
-		request.setAttribute("chollosList", chollosList);
-
-		RequestDispatcher view = request.getRequestDispatcher("indexUserView.jsp");
-		view.forward(request, response);
 
 	}
 

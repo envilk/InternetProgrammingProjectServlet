@@ -32,18 +32,22 @@
 			<span class="label label-default">Title: </span>
 			<div>
 				<input type="text" class="form-control input-lg" name="title"
-					value="">
-			</div> <br>
-			<span class="label label-default">Description: </span>
+					value=""> <span class="label label-default">Current
+					title: </span> <label class="control-label few-chars">${chollo.title}</label>
+			</div>
+			<br> <span class="label label-default">Description: </span>
 			<div>
 				<input type="text" class="form-control input-lg" name="description"
-					value="">
-			</div> <br>
-			<span class="label label-info">Link: </span> 
+					value=""> <span class="label label-default">Current
+					description: </span> <label class="control-label few-chars">${chollo.description}</label>
+			</div>
+			<br> <span class="label label-info">Link: </span>
 			<div>
-				<input type="url" class="form-control input-lg" name="link"
-					value="">
-			</div> <br>
+				<input type="url" class="form-control input-lg" name="link" value="">
+				<span class="label label-default">Current link: </span> <label
+					class="control-label few-chars">${chollo.link}</label>
+			</div>
+			<br>
 			<div class="form-group">
 				<div>
 					<button type="submit" class="confirmButton btn btn-success">MODIFY</button>

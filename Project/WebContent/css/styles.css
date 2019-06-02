@@ -44,6 +44,12 @@
 	height: 100px;
 }
 
+.few-chars{
+  width: 20ch;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 img.desaturate {
 	filter: grayscale(100%);
 }

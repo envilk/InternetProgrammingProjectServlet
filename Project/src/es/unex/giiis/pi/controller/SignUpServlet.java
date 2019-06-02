@@ -88,13 +88,14 @@ public class SignUpServlet extends HttpServlet {
 		//Only if there's no user(null) in the database with the data introduced before the user can be created in the database
 		if (user.validateName(messages) && user.validatePasswords(password_confirmation) && userDao == null) {
 			dao.add(user);
-			session.setAttribute("user", user);
+			User newU = dao.getUsername(user.getUsername());
+			session.setAttribute("user", newU);
 
-			RequestDispatcher view = request.getRequestDispatcher("indexUserView.jsp");
+			RequestDispatcher view = request.getRequestDispatcher("index.jsp");
 			view.forward(request, response);
 		}
 		else {
-			response.sendRedirect("ListChollosServlet.do");
+			response.sendRedirect("/Project");
 		}
 
 	}
