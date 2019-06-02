@@ -2,6 +2,7 @@ package es.unex.giiis.pi.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -63,6 +64,11 @@ public class DeleteAccount extends HttpServlet {
 		ServletContext sc = request.getServletContext();
 		Connection conn = (Connection) sc.getAttribute("dbConn");
 		HttpSession session = request.getSession();
+		
+		JDBCCholloDAOImpl cholloDao = new JDBCCholloDAOImpl();
+		cholloDao.setConnection(conn);
+		
+		List<Chollo> chollos = cholloDao.getAll();
 
 		//USERS
 		User user = new User();
@@ -75,6 +81,13 @@ public class DeleteAccount extends HttpServlet {
 		if(user != null) {
 			userDao.delete(user.getId());
 			session.invalidate();
+			
+			for (Chollo chollo : chollos) {
+				
+				if(user.getId()==chollo.getIdu())
+					cholloDao.delete(chollo.getId());
+			}
+				
 		}
 
 		response.sendRedirect("/Project");
