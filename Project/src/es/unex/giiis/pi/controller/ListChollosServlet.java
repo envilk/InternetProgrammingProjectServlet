@@ -10,18 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import es.unex.giiis.pi.dao.CategoryDAO;
 import es.unex.giiis.pi.dao.CholloDAO;
-import es.unex.giiis.pi.dao.ChollosCategoryDAO;
-import es.unex.giiis.pi.dao.JDBCCategoryDAOImpl;
 import es.unex.giiis.pi.dao.JDBCCholloDAOImpl;
-import es.unex.giiis.pi.dao.JDBCChollosCategoryDAOImpl;
-import es.unex.giiis.pi.dao.JDBCShopDAOImpl;
 import es.unex.giiis.pi.dao.JDBCUserDAOImpl;
-import es.unex.giiis.pi.dao.ShopDAO;
 import es.unex.giiis.pi.dao.UserDAO;
 import es.unex.giiis.pi.model.Chollo;
-import es.unex.giiis.pi.model.Shop;
 import es.unex.giiis.pi.model.User;
 
 import javax.servlet.RequestDispatcher;
